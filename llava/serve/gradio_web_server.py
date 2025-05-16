@@ -241,7 +241,7 @@ def http_bot(state, model_selector, temperature, top_p, max_new_tokens, request:
     try:
         # Stream output
         response = requests.post(worker_addr + "/worker_generate_stream",
-            headers=headers, json=pload, stream=True, timeout=10)
+            headers=headers, json=pload, stream=True, timeout=5000)
         for chunk in response.iter_lines(decode_unicode=False, delimiter=b"\0"):
             if chunk:
                 data = json.loads(chunk.decode())
@@ -329,7 +329,7 @@ def build_demo(embed_mode):
                 image_process_mode = gr.Radio(
                     ["Crop", "Resize", "Pad", "Default"],
                     value="Default",
-                    label="Preprocess for non-square image", visible=False)
+                    label="Preprocess for non-square image", visible=True)
 
                 cur_dir = os.path.dirname(os.path.abspath(__file__))
                 gr.Examples(examples=[
@@ -365,7 +365,7 @@ def build_demo(embed_mode):
         if not embed_mode:
             gr.Markdown(tos_markdown)
             gr.Markdown(learn_more_markdown)
-        url_params = gr.JSON(visible=False)
+        url_params = gr.JSON(visible=True)
 
         # Register listeners
         btn_list = [upvote_btn, downvote_btn, flag_btn, regenerate_btn, clear_btn]
